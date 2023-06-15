@@ -1,4 +1,4 @@
-# DEBOS - BOOKWORMFORK
+# DEBOS - BOOKWORM FORK
 
 ## edits in this for:
 docker/Dockerfile:
