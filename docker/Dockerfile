@@ -3,7 +3,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG GOPATH=/usr/local/go
 
 ### first stage - builder ###
-FROM debian:bullseye-slim as builder
+FROM debian:bookworm-slim as builder
 
 ARG DEBIAN_FRONTEND
 ARG GOPATH
@@ -18,6 +18,7 @@ RUN apt-get update && \
         golang-go \
         libc6-dev \
         libostree-dev \
+	make \
         unzip && \
     rm -rf /var/lib/apt/lists/*
 
@@ -36,14 +37,8 @@ RUN apt-get update && \
         systemd && \
     rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://gitlab.archlinux.org/archlinux/archlinux-keyring && \
-    cd archlinux-keyring && \
-    git checkout -B latest-release 20221213 && \
-    make build && \
-    make PREFIX=/usr KEYRING_TARGET_DIR=/usr/share/keyrings/ DESTDIR=/arch-keyring install
-
 ### second stage - runner ###
-FROM debian:bullseye-slim as runner
+FROM debian:bookworm-slim as runner
 
 ARG DEBIAN_FRONTEND
 ARG GOPATH
@@ -104,18 +99,15 @@ RUN apt-get update && \
         zip && \
     rm -rf /var/lib/apt/lists/*
 
-# Enable backports for the Arch dependencies
-RUN echo "deb http://ftp.debian.org/debian bullseye-backports main" >> /etc/apt/sources.list
-
 # NOTE: Explicitly install arch-install-scripts from backports. The normal one
 # lacks pactrap.
 # Install Arch dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         makepkg \
+	systemd-resolved \
         pacman-package-manager && \
     apt-get install -y --no-install-recommends \
-        -t bullseye-backports \
         arch-install-scripts && \
     rm -rf /var/lib/apt/lists/*
 
@@ -126,9 +118,5 @@ RUN for arch in aarch64 alpha arm armeb cris hexagon hppa m68k microblaze mips m
     done
 
 COPY --from=builder $GOPATH/bin/debos /usr/local/bin/debos
-
-# Pull the latest archlinux-keyring, since the one in Debian is outdated
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1026080
-COPY --from=builder /arch-keyring/ /
 
 ENTRYPOINT ["/usr/local/bin/debos"]
