@@ -1,9 +1,11 @@
 # DEBOS - BOOKWORM FORK
 
-## edits in this for:
+## edits in this fork:
 docker/Dockerfile:
 Updated to use bookworm instead of bullseye.  Needed to build later releases of Debian or Ubuntu.
 
+
+------------------------------------------------
 
 # debos -  Debian OS images builder
 
