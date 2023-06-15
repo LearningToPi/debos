@@ -1,8 +1,11 @@
 # DEBOS - BOOKWORM FORK
 
 Fork git: https://github.com/LearningToPi/debos
+
 Original git: https://github.com/go-debos/debos
+
 Original docker: https://hub.docker.com/r/godebos/debos
+
 
 ## edits in this fork:
 docker/Dockerfile:
