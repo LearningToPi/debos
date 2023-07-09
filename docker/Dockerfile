@@ -46,9 +46,9 @@ ARG GOPATH
 # Set HOME to a writable directory in case something wants to cache things
 ENV HOME=/tmp
 
-LABEL org.label-schema.name "debos"
-LABEL org.label-schema.description "Debian OS builder"
-LABEL org.label-schema.vcs-url = "https://github.com/go-debos/debos"
+LABEL org.label-schema.name "debos bookworm"
+LABEL org.label-schema.description "Debian OS builder (bookworm fork)"
+LABEL org.label-schema.vcs-url = "https://github.com/LearningToPi/debos"
 LABEL org.label-schema.docker.cmd 'docker run \
   --rm \
   --interactive \
